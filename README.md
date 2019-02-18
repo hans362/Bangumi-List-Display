@@ -30,6 +30,8 @@ Sorry, we are currently unable to provide an English version of this file. Maybe
 
 ![PREVIEW](https://github.com/hans362/Bangumi-List-Display/raw/master/preview.png)
 
+DEMO：http://test.hans362.cn/get_bangumi_list.php?uid=66745436
+
 ## 如何部署？
 
 既然是PHP程序，一套 PHP+Web Server 的运行环境肯定是要有的啦~（废话
