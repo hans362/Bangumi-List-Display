@@ -52,7 +52,7 @@ for ($x = 1; $x <= $pages; $x++) {
                         $img = curl_exec($ch);
                         curl_close($ch);
                         $filename = pathinfo($url, PATHINFO_BASENAME);
-                        if (file_exists($filename)) {
+                        if (file_exists('cache/' . $filename)) {
                             if ($result['is_finish'] == 1) {
                                 echo "<div class=\"mdui-col\"><a href=\"" . $result['share_url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['brief'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
                             } else {
