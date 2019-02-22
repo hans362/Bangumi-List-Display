@@ -4,13 +4,11 @@
 	感谢 @ohmyga233
 -->
 
-<link rel="stylesheet" type="text/css" href="assets/css/fonts.css">
 <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
-<link rel="stylesheet" type="text/css" href="assets/css/mdui.min.css">
-<link rel="stylesheet" type="text/css" href="assets/css/fancybox.min.css">
-<script src="assets/js/mdui.min.js"></script>
-<script src="assets/js/jquery3.3.1.min.js"></script>
-<script src="assets/js/jquery.pjax.min.js"></script>
+<link href="https://cdn.bootcss.com/mdui/0.4.2/css/mdui.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/mdui/0.4.2/js/mdui.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
 <style>.moe-card-t { background-color: rgba(255, 255, 255, 0.8) } .moe-text-color { color: #fff!important } .moe-bg { background-image: url(https://ohmyga.net/usr/img/sad.jpg); } @media (max-width: 600px){ .moe-bg { background-image: url(https://ohmyga.net/usr/img/wake.webp); }} .moe-page-title::before { color: #E91E63; content: "• " } .moe-page-title::after { color: #E91E63; content: " •" } .moe-bangumi-img { background-image: url(https://ohmyga.net/usr/themes/CastleME/others/img/pic_load.gif); }</style>
 
 <div id="moe-body">
