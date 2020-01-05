@@ -1,6 +1,6 @@
 <!--
     追番列表展示API By Hans362
-	Version: 1.0
+	Version: 1.1
 	感谢 @ohmyga233
 -->
 
@@ -19,52 +19,43 @@
 
 /* 
 	追番列表展示API By Hans362
-	Version: 1.0
+	Version: 1.1
 	感谢 @ohmyga233
 */
 
 $uid = $_GET["uid"]; //获取提交的UID
 
-//Step#1 获取页数（Bilibili API存在单页显示数限制，先通过API调取总页数）
-$file = curl_get_https('https://space.bilibili.com/ajax/Bangumi/getList?mid=' . $uid);
-$origin = json_decode($file);
-$pages = $origin->data->pages;
-//Step#1 End
-
-//Step#2 利用for循环和foreach遍历每一页的数据，逐个获取需要的信息并输出（总页数来源于Step#1中获取的）
-for ($x = 1; $x <= $pages; $x++) {
-    if ($uid != null) {
-        $file_contents = curl_get_https('https://space.bilibili.com/ajax/Bangumi/getList?mid=' . $uid . '&page=' . $x);
-        $arr = json_decode($file_contents, true);
-        if (is_array($arr) || is_object($arr)) {
-            foreach ($arr as $obj) {
-                if (is_array($obj['result']) || is_object($obj['result'])) {
-                    foreach ($obj['result'] as $result) {
-                        //echo $result['title'] . "</br>";
-                        $url = $result['cover'];
-                        $path = 'cache/';
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL, $url);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-                        $img = curl_exec($ch);
-                        curl_close($ch);
-                        $filename = pathinfo($url, PATHINFO_BASENAME);
-                        if (file_exists('cache/' . $filename)) {
-                            if ($result['is_finish'] == 1) {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['share_url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['brief'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
-                            } else {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['share_url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['brief'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['newest_ep_index'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
-                            }
+//Step#1 利用for循环和foreach遍历数据，逐个获取需要的信息并输出
+if ($uid != null) {
+    $file_contents = curl_get_https('https://api.bilibili.com/x/space/bangumi/follow/list?type=1&vmid=' . $uid);
+    $arr = json_decode($file_contents, true);
+    if (is_array($arr) || is_object($arr)) {
+        foreach ($arr as $obj) {
+            if (is_array($obj['list']) || is_object($obj['list'])) {
+                foreach ($obj['list'] as $result) {
+                    $url = $result['cover'];
+                    $path = 'cache/';
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+                    $img = curl_exec($ch);
+                    curl_close($ch);
+                    $filename = pathinfo($url, PATHINFO_BASENAME);
+                    if (file_exists('cache/' . $filename)) {
+                        if ($result['is_finish'] == 1) {
+                            echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
                         } else {
-                            $resource = fopen($path . $filename, 'a');
-                            fwrite($resource, $img);
-                            fclose($resource);
-                            if ($result['is_finish'] == 1) {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['share_url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['brief'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
-                            } else {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['share_url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['brief'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['newest_ep_index'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
-                            }
+                            echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['newest_ep_index'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                        }
+                    } else {
+                        $resource = fopen($path . $filename, 'a');
+                        fwrite($resource, $img);
+                        fclose($resource);
+                        if ($result['is_finish'] == 1) {
+                            echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                        } else {
+                            echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['newest_ep_index'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
                         }
                     }
                 }
@@ -72,7 +63,7 @@ for ($x = 1; $x <= $pages; $x++) {
         }
     }
 }
-//Step#2 End
+//Step#1 End
 
 //Step#0 配置curl参数
 function curl_get_https($url) {
