@@ -1,14 +1,11 @@
 <!--
     追番列表展示API By Hans362
-	Version: 1.2
+	Version: 1.3
 	感谢 @ohmyga233
 -->
 
 <link rel="stylesheet" type="text/css" href="assets/css/style.min.css">
 <link href="https://cdn.bootcss.com/mdui/0.4.2/css/mdui.min.css" rel="stylesheet">
-<script src="https://cdn.bootcss.com/mdui/0.4.2/js/mdui.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/jquery.pjax/2.0.1/jquery.pjax.min.js"></script>
 <style>.moe-card-t { background-color: rgba(255, 255, 255, 0.8) } .moe-text-color { color: #fff!important } .moe-bg { background-image: url(https://ohmyga.net/usr/img/sad.jpg); } @media (max-width: 600px){ .moe-bg { background-image: url(https://ohmyga.net/usr/img/wake.webp); }} .moe-page-title::before { color: #E91E63; content: "• " } .moe-page-title::after { color: #E91E63; content: " •" } .moe-bangumi-img { background-image: url(https://ohmyga.net/usr/themes/CastleME/others/img/pic_load.gif); }</style>
 
 <div id="moe-body">
@@ -18,7 +15,7 @@
 <?php
 /* 
 	追番列表展示API By Hans362
-	Version: 1.2
+	Version: 1.3
 	感谢 @ohmyga233
 */
 //获取提交的 UID
@@ -47,18 +44,18 @@ if ($uid != null) {
                         $filename = pathinfo($url, PATHINFO_BASENAME);
                         if (file_exists('cache/' . $filename)) {
                             if ($result['is_finish'] == 1) {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 100%;\"></div></div></div></div></a></div>";
                             } else {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['newest_ep_index'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['new_ep']['title'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 100%;\"></div></div></div></div></a></div>";
                             }
                         } else {
                             $resource = fopen($path . $filename, 'a');
                             fwrite($resource, $img);
                             fclose($resource);
                             if ($result['is_finish'] == 1) {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['total_count'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 100%;\"></div></div></div></div></a></div>";
                             } else {
-                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['new_ep']['title'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 50%;\"></div></div></div></div></a></div>";
+                                echo "<div class=\"mdui-col\"><a href=\"" . $result['url'] . "\" class=\"moe-bangumi-href\" title=\"" . $result['title'] . "\" target=\"_blank\"><div class=\"mdui-card moe-bangumi-card moe-card-t\"><div class=\"mdui-card-media\" style=\"overflow: hidden;\"><main class=\"moe-bangumi-img moe-post-wzimg-f\" data-original=\"cache/" . $filename . "\" style=\"background-image: url(&quot;cache/" . $filename . "&quot;);\"></main><div class=\"mdui-card-media-covered moe-card-media-covered\"><div class=\"mdui-card-primary\"><div class=\"mdui-card-primary-title moe-bangumi-title\">" . $result['title'] . "</div><div class=\"mdui-card-primary-subtitle\">" . $result['evaluate'] . "</div></div></div></div><div class=\"mdui-card-actions\"><div class=\"mdui-float-right\">" . $result['new_ep']['title'] . "</div><div class=\"mdui-progress\"><div class=\"mdui-progress-determinate\" style=\"width: 100%;\"></div></div></div></div></a></div>";
                             }
                         }
                     }
