@@ -1,5 +1,7 @@
 # 追番列表展示API
 
+# 本项目已经归档，不再维护，请移步作者基于前端 + Serverless Function 实现的新项目 https://github.com/hans362/Bilibili-Bangumi-JS
+
 For English version, please ...
 
 Sorry, we are currently unable to provide an English version of this file. Maybe sometime in the future we will :-)
